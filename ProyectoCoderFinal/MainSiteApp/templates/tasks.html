@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block pagecontent %}
+    
+<div class="container-fluid">
+    <h1>Tasks</h1>
+    
+    {% for task  in  tasklist%}
+    
+    <p>{{ task.task_name }} </p>
+        
+    {% endfor %}
+        
+</div>
+
+{% endblock %}

@@ -4,5 +4,6 @@ from django.contrib.auth.views import LoginView
 
 urlpatterns = [
 
-    path('', views.inicio, name="Inicio"),
+    path('', views.inicio, name="Dashboard"),
+    path('user-tasks', views.tasks, name="UserTasks"),
 ]
