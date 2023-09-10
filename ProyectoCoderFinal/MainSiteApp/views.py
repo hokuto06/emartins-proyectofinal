@@ -21,7 +21,7 @@ def createTask(req):
             
             data = formTask.cleaned_data
             newtask = MyTasks( task_name = data['task_name'], task_description = data['task_description'],
-                              task_content = ['task_content'] )
+                              task_content = data['task_content'] )
             newtask.save()
             task_list = MyTasks.objects.all()
             return render(req, "tasks.html", {"tasklist": task_list})
