@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block pagecontent %}
+
+{% if taskForm.errors %}
+
+<p> Datos incorrectos</p>
+
+{% endif %}
+
+<form action="" method="post">{% csrf_token %}
+        
+        
+        {{ taskForm.as_p }}
+        
+    
+    <input type="submit" value="Enviar">
+</form>
+
+{% endblock %}

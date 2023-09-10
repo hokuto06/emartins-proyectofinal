@@ -5,12 +5,25 @@
     
 <div class="container-fluid">
     <h1>Tasks</h1>
-    
-    {% for task  in  tasklist%}
-    
-    <p>{{ task.task_name }} </p>
+    <a href="{% url 'CreateTask' %}">Nueva Tarea</a>
+   
+    <section class="task-list">
+
+        {% for task  in  tasklist%}
+        <div class="card" style="width: 18rem;">
+            <img src="https://freeiconshop.com/wp-content/uploads/edd/list-flat.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ task.task_name }}</h5>
+              <p class="card-text">{{ task.task_content }}></p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>        
         
-    {% endfor %}
+        
+        
+        {% endfor %}
+    
+    </section>
         
 </div>
 
