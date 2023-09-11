@@ -30,3 +30,12 @@ def createTask(req):
 
         formTask = TaskCreationForm()
     return render(req, "taskForm.html", {"taskForm": formTask})
+
+def delete_task(req, id):
+
+    task = MyTasks.objects.get(id=id)
+    task.delete()
+
+    task_list = MyTasks.objects.all()
+
+    return render(req, 'tasks.html',{'tasklist':task_list})
