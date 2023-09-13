@@ -9,18 +9,18 @@
    
     <section class="task-list">
 
-        {% for task  in  tasklist%}
+        {% for task  in  tasklist %}
         <div class="card" style="width: 18rem;">
             <img src="https://freeiconshop.com/wp-content/uploads/edd/list-flat.png" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{ task.task_name }}</h5>
-              <p class="card-text">{{ task.task_content }}></p>
-              <a href="{% url  'DeleteTask' task.id %}" class="btn btn-primary">Delete</a>
+              <p class="card-text">{{ task.task_content }}</p>
+              <form action="{% url  'DeleteTask' task.id %}" method="post">{% csrf_token %}
+                <button type="submit">Delete</button>
+              </form>
             </div>
           </div>        
-        
-        
-        
+
         {% endfor %}
     
     </section>

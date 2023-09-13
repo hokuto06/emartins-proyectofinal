@@ -21,7 +21,7 @@
   </div>
 -->
 
-<form action="" method="post">{% csrf_token %}
+<form action="{% url  'CreateTask' %}" method="post">{% csrf_token %}
         
         {{ taskForm.as_p }}
     
