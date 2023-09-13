@@ -11,13 +11,18 @@
 
         {% for task  in  tasklist %}
         <div class="card" style="width: 18rem;">
-            <img src="https://freeiconshop.com/wp-content/uploads/edd/list-flat.png" class="card-img-top" alt="...">
+            <img style="max-width:20%;" src="https://freeiconshop.com/wp-content/uploads/edd/list-flat.png" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{ task.task_name }}</h5>
+<<<<<<< HEAD
               <p class="card-text">{{ task.task_content }}</p>
               <form action="{% url  'DeleteTask' task.id %}" method="post">{% csrf_token %}
                 <button type="submit">Delete</button>
               </form>
+=======
+              <p class="card-text">{{ task.id }}</p>
+              <a href="#" class="btn btn-primary">De1tail</a11>
+>>>>>>> b9d62995b9ba640baba744eed2e5eb09319ac9c1
             </div>
           </div>        
 
