@@ -9,20 +9,21 @@
    
     <section class="task-list">
 
-        {% for task  in  tasklist %}
+        {% for task  in  prueba %}
         <div class="card border-primary mb-3" style="width: 18rem;">
             <img class="img-fluid" style="width:20%;padding:5px;" src="https://freeiconshop.com/wp-content/uploads/edd/list-flat.png" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{ task.task_name }}</h5>
               <p class="card-text">{{ task.task_content }}</p>
+              <a href="DetailTasks">Ver Detalle</a>
               <a href="{% url  'CreateComment' task.id %}">Agregar Comentario</a>
               <!--
               <form action="{% url  'CreateComment' task.id %}" method="get">{% csrf_token %}
                 <button type="submit">Agregar Comentario</button>
               </form>-->
-              <form action="{% url  'DeleteTask' task.id %}" method="post">{% csrf_token %}
-                <button type="submit">Delete</button>
-              </form>
+              <button>
+                <a href="{% url  'DeleteTask' task.id %}">Eliminar</a>
+              </button>
             </div>
           </div>
 

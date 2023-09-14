@@ -1,0 +1,71 @@
+/* Colores pastel */
+:root {
+    --color-primary: #6a0572; /* Púrpura pastel */
+    --color-secondary: #ff9a8b; /* Rosa pastel */
+    --color-tertiary: #83c5be; /* Verde pastel */
+    --color-quaternary: #f0e68c; /* Amarillo pastel */
+    --color-text: #333; /* Color de texto principal */
+  }
+  
+  /* Estilos para el navbar */
+  .navbar {
+    background-color: var(--color-primary);
+  }
+  
+  .navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+  }
+  
+  .navbar-dark .navbar-toggler-icon {
+    background-color: #fff;
+  }
+  
+  /* Estilos para el sidebar */
+  .sidebar {
+    background-color: #f8f9fa;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .sidebar-heading {
+    padding: 1rem;
+    font-weight: bold;
+  }
+  
+  .sidebar .nav-link {
+    color: var(--color-text);
+  }
+  
+  /* Estilos para el contenido principal (body) */
+  .main-content {
+    padding: 1rem;
+    background-color: #fff; /* Fondo blanco para el contenido principal */
+    color: var(--color-text);
+  }
+  
+  /* Estilos para el enlace activo en el sidebar */
+  .sidebar .nav-item.active .nav-link {
+    background-color: var(--color-secondary);
+    color: #fff;
+  }
+  
+  /* Estilos para el espacio en el contenido cuando el sidebar está fijo (si es necesario) */
+  .fixed-sidebar ~ .main-content {
+    margin-left: 250px;
+  }
+  
+  /* Estilos para el contenido responsivo (si es necesario) */
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+  
+    .fixed-sidebar {
+      position: static;
+      width: 100%;
+    }
+  
+    .fixed-sidebar ~ .main-content {
+      margin-left: 0;
+    }
+  }
+  

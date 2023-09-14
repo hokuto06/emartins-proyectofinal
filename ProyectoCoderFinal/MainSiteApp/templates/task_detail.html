@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block pagecontent %}
+
+    <h1>Vista en detalle de la tarea</h1>
+    <h3>Tarea: {{task.task_name}}</h3>
+    <h3>Contenido: {{task.task_content}}</h3>
+    <h3>Creada en {{task.created_at}}</h3>
+    <h3>Finaliza: {{task.deadline}}</h3>
+    <h3>Estado: {{task.open}}</h3>
+    
+{% endblock pagecontent %}
+
+    

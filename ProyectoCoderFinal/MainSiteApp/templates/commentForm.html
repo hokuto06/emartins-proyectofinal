@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block pagecontent %}
+
+{% if taskForm.errors %}
+
+<p> Datos incorrectos</p>
+
+{% endif %}
+
+<p>{{ task.task_name }}</p>
+<form action="{% url  'CreateComment' task.id %}" method="POST">{% csrf_token %}
+        
+        {{ commentForm.as_p }}
+    
+    <input type="submit" value="Enviar">
+</form>
+{% endblock %}
