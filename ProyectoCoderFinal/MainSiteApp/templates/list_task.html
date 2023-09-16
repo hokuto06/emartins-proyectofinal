@@ -15,7 +15,7 @@
             <div class="card-body">
               <h5 class="card-title">{{ task.task_name }}</h5>
               <p class="card-text">{{ task.task_content }}</p>
-              <a href="DetailTasks">Ver Detalle</a>
+              <a href="{% url  'DetailTasks' task.id %}">Ver Detalle</a>
               <a href="{% url  'CreateComment' task.id %}">Agregar Comentario</a>
               <!--
               <form action="{% url  'CreateComment' task.id %}" method="get">{% csrf_token %}

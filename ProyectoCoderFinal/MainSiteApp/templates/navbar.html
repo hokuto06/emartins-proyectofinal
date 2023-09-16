@@ -17,6 +17,10 @@
                 </li>
                 
                 {% if  user.is_authenticated %}
+
+                    {% if url %}
+                        <img src="{{url}}" height="40px" alt="avatar">
+                    {% endif %}
                     <p>{{user.username}}</p>
                     <li class="nav-item active"><a class="nav-link" href="{% url  'Logout' %}">Logout</a></li>
                 {% else %}

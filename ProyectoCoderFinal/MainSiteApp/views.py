@@ -1,17 +1,23 @@
 from django.shortcuts import render
 from django.http import HttpRequest
-from .models import *
-from .forms import *
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, CreateView, UpdateView
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-def inicio(req):
-    return render(req, 'dashboard.html')
+from .models import *
+from .forms import *
+
+def inicio(req: HttpRequest):
+ 
+    try:
+        avatar = Avatar.objects.get(user=req.user.id)
+        return render(req, 'dashboard.html', {"message":f"test","url": avatar.image.url})
+    except:
+        return render(req, 'dashboard.html')
 
 def view_tasks(req):
     task_list = MyTasks.objects.all()
@@ -138,3 +144,49 @@ def register(req: HttpRequest):
         formulario = UserCreationForm()
         return render(req, "register.html", {"formulario": formulario})
     
+def edit_perfil(req: HttpRequest):
+
+    user = req.user
+
+    if req.method == 'POST':
+        formulario = UserEditForm(req.POST, instance=req.user )
+    
+        if formulario.is_valid():
+
+            data = formulario.cleaned_data
+
+            user.first_name = data['first_name']
+            user.last_name = data['last_name']
+            # user.email = data['email']
+            user.set_password(data["password1"])
+            user.save()
+            return render(req, "dashboard.html", {"message": "Perfil actualizado con exito"})
+        else:
+            return render(req, 'edit_perfil.html', {"formulario": formulario})
+    else:
+        formulario = UserEditForm(instance=req.user)    
+    
+        return render(req, 'edit_perfil.html', {"formulario": formulario})
+    
+def add_avatar(req: HttpRequest):
+
+    if req.method == 'POST':
+
+        formulario = AvatarForm(req.POST, req.FILES)
+
+        if formulario.is_valid():
+
+            data = formulario.cleaned_data
+
+            avatar = Avatar(user=req.user, image=data['image'])
+
+            avatar.save()
+
+            return render(req, "dashboard.html", {"message": f"Avatar actualizado con exito!"})
+
+        else:
+            return render(req, "dashboard.html", {"message": "Formulario invalido"})
+        
+    else:
+        formulario = AvatarForm()
+        return render(req, "add_avatar.html", {"formulario": formulario})

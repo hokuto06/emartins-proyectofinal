@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 class MyTasks(models.Model):
 
     task_name = models.CharField(max_length=30)
@@ -23,3 +23,8 @@ class TaskComments(models.Model):
 
     def __str__(self):
         return f'{self.comment}'
+    
+class Avatar(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='avatares', blank=True, null=True)

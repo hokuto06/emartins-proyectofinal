@@ -1,5 +1,6 @@
 from django.urls import path
 from MainSiteApp import views
+
 from django.contrib.auth.views import LogoutView
 from .views import *
 #test
@@ -15,5 +16,7 @@ urlpatterns = [
     path('delete-task/<pk>', DeleteTask.as_view(), name="DeleteTask"),
     path('login/', login_view, name="Login"),
     path('register', register, name="Register"),
-    path('logout/', LogoutView.as_view(template_name="dashboard.html"), name="Logout"),
+    path('logout/', LogoutView.as_view(template_name="login.html"), name="Logout"),
+    path('edit-perfil/', edit_perfil, name="EditPerfil"),
+    path('add-avatar/', add_avatar, name="AddAvatar"),
 ]

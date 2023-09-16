@@ -1,0 +1,12 @@
+{% extends 'edit_user.html' %}
+
+
+{% block editperfil %}
+    <form action="{% url  'EditPerfil' %}" method="post">{% csrf_token %}
+
+        {{formulario.as_p}}
+        <button type="submit">Actualizar</button>
+    </form>
+
+{% endblock editperfil %}
+    
