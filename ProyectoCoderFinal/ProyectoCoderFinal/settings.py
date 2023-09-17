@@ -26,7 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap_datepicker_plus',
     'MainSiteApp',
+
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 "MainSiteApp.context_processors.get_current_year",
                 "MainSiteApp.context_processors.load_avatar",
-
+                "MainSiteApp.context_processors.count_tasks_owner",                
             ],
         },
     },
