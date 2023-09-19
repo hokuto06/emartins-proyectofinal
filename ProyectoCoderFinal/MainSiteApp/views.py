@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -19,8 +19,11 @@ def inicio(req: HttpRequest):
     except:
         return render(req, 'dashboard.html')
 
-def view_tasks(req):
-    task_list = MyTasks.objects.all()
+def view_tasks(req: HttpRequest):
+    task_list = TasksList.objects.filter(owner=req.user)
+    #task_list = TasksList.objects.all()
+    # count_tasks = TaskComments.objects.filter(task_comment__id=id).count()
+    print(task_list)
     return render(req, 'tasks.html', {"tasklist": task_list})
 
 def createTask(req):
@@ -29,10 +32,10 @@ def createTask(req):
         formTask = TaskCreationForm(req.POST)
         if formTask.is_valid():
             data = formTask.cleaned_data
-            newtask = MyTasks( task_name = data['task_name'], task_description = data['task_description'],
+            newtask = TasksList( task_name = data['task_name'], task_description = data['task_description'],
                               task_content = data['task_content'] )
             newtask.save()
-            task_list = MyTasks.objects.all()
+            task_list = TasksList.objects.all()
             return render(req, "tasks.html", {"tasklist": task_list})
     else:
         taskForm = TaskCreationForm()
@@ -42,56 +45,125 @@ def delete_task(req, id):
     
     if req.method == 'POST':
 
-        task = MyTasks.objects.get(id=id)
+        task = TasksList.objects.get(id=id)
         task.delete()
-        task_list = MyTasks.objects.all()
+        task_list = TasksList.objects.all()
 
         return render(req, 'tasks.html', {'tasklist': task_list})
     
-def create_comment(req: HttpRequest, id):
-    taskObject = MyTasks.objects.get(id=id)
+# def create_comment(req: HttpRequest, id):
+#     taskObject = TasksList.objects.get(id=id)
+
+#     if req.method == 'POST':
+#         print("Esto es metodo post")
+#         formComment = CommentCreationForm(req.POST)
+#         if formComment.is_valid():
+#             data = formComment.cleaned_data
+
+#             task_comment = TasksListRows(comment=data['comment'],state=data['state'],task_comment=taskObject)
+#             task_comment.save()
+#             return render(req, 'tasks.html')
+    
+#     else:
+#         print("esto es metodo get")
+#         task = TasksList.objects.get(id=id)
+#         comment_form = CommentCreationForm(initial={
+#             "state": 1,
+#             "task_comment":task,
+#         })
+
+#         return render(req, 'commentForm.html', {"commentForm": comment_form, 'task': task})
+
+
+def create_comment(req, id):
+    taskObject = TasksList.objects.get(id=id)
 
     if req.method == 'POST':
-        print("Esto es metodo post")
         formComment = CommentCreationForm(req.POST)
         if formComment.is_valid():
             data = formComment.cleaned_data
-
-            task_comment = TaskComments(comment=data['comment'],state=data['state'],task_comment=taskObject)
+            task_comment = TasksListRows(comment=data['comment'], state=data['state'], task_comment=taskObject)
             task_comment.save()
-            return render(req, 'tasks.html')
+            # Redirige al detalle del objeto relacionado
+            return redirect('DetailTasks', pk=id)
     
     else:
-        print("esto es metodo get")
-        task = MyTasks.objects.get(id=id)
+        task = TasksList.objects.get(id=id)
         comment_form = CommentCreationForm(initial={
             "state": 1,
-            "task_comment":task,
+            "task_comment": task,
         })
 
         return render(req, 'commentForm.html', {"commentForm": comment_form, 'task': task})
 
+
+def view_comments(req: HttpRequest, id):
+    comment_list = TasksListRows.objects.filter(task_comment__id=id)
+    print(comment_list)
+    return render(req, 'task_comment.html', {'comment_list': comment_list})
 ###Clases basadas en vistas
 
-class TaskList(ListView):
-    model = MyTasks
+class TaskList(LoginRequiredMixin, ListView):
+    model = TasksList
     template_name = "list_task.html"
+    paginate_by = 3
     # fields = '__all__'
     context_object_name = "prueba"
+    def get_queryset(self):
+        return super().get_queryset().filter(owner=self.request.user)
+
 
 class TaskDetail(DetailView):
-    model = MyTasks
+
+    model = TasksList
     template_name = "task_detail.html"
-    context_object_name = "task"
+    #context_object_name = "task"
+    def get_context_data(self, **kwargs):
 
+        context = super().get_context_data(**kwargs)
+        # Obtener la instancia de la task actual
+        task = self.object
+        # Obtener todos los comentarios relacionados con esta task
+        rows = task.taskslistrows_set.all()
+        # Obtener el total de rows de la task
+        total_rows = rows.count()
+        context['comentarios'] = rows
+        context['total_rows'] = total_rows        
+        return context
+
+
+#pasar owner id
 class CreateTask(CreateView):
-    model = MyTasks
+    
+    model = TasksList
     template_name = "task_create.html"
-    fields = ["task_name","task_description","deadline","task_content"]
+    #fields = ["task_name","task_description","deadline","task_content"]
     success_url = "/proyecto-final/list-tasks/"
+   
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(CreateTask, self).form_valid(form)
 
+    def get_form_class(self):
+        return CreateTaskForm
+
+
+# class CreateTasksListRow(CreateView):
+    
+#     model = TasksListRows
+#     template_name = "commentForm.html"
+#     form_class = CreateTaskForm
+   
+#     def form_valid(self, form):
+#         form.instance.task_comment = self.object.task_comment
+#         return super().form_valid(form)
+
+#     def get_success_url(self):
+#         return "/proyecto-final/list-tasks/"
+    
+    
 class DeleteTask(DeleteView):
-    model = MyTasks
+    model = TasksList
     template_name = "delete_task.html"
     success_url = "/proyecto-final/list-tasks/"
 
@@ -127,7 +199,7 @@ def register(req: HttpRequest):
 
     if req.method == 'POST':
 
-        formulario = UserCreationForm(req.POST)
+        formulario = UserRegisterForm(req.POST)
 
         if formulario.is_valid():
 
@@ -137,11 +209,11 @@ def register(req: HttpRequest):
 
             formulario.save()
 
-            return render(req, "dashboard.html", {"message": f"Usuario {username} creado"})
+            return render(req, "register_success.html", {"message": f"Usuario {username} creado"})
         else:
             return render(req, "dashboard.html", {"message": "Datos incorrectos"})
     else:
-        formulario = UserCreationForm()
+        formulario = UserRegisterForm()
         return render(req, "register.html", {"formulario": formulario})
     
 def edit_perfil(req: HttpRequest):

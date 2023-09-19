@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block pagecontent %}
+    {% for comment in comment_list %}
+        <p>{{comment.comment}}</p>
+    {% endfor %}
+            
+
+{% endblock pagecontent %}
+    

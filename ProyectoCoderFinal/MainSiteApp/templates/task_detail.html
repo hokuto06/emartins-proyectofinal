@@ -3,13 +3,42 @@
 
 {% block pagecontent %}
 
-    <h1>Vista en detalle de la tarea</h1>
-    <h3>Tarea: {{task.task_name}}</h3>
-    <h3>Contenido: {{task.task_content}}</h3>
-    <h3>Creada en {{task.created_at}}</h3>
-    <h3>Finaliza: {{task.deadline}}</h3>
-    <h3>Estado: {{task.open}}</h3>
-    
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">{{ object.task_name }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="mt-3 border rounded custom-card-style" >
+                <a href="{% url  'CreateComment' object.id %}">Agregar Comentario</a>
+
+                <p class="card-text">{{ object.task_description }}</p>
+                <p class="card-text">{{ object.task_content }}</p>
+                <div class="d-flex align-items-center">
+                    <p class="mb-0">Total comentarios: {{ total_rows }}</p>
+                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#comentarios">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="collapse mt-3" id="comentarios">
+                <ul class="list-group">
+                    {% for comentario in comentarios %}
+                    <li class="list-group-item-light d-flex justify-content-between align-items-center">
+                        <a>{{ comentario.comment }}</a>
+                        <div>
+                            <input type="checkbox" {% if not object.open %}disabled{% endif %}>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock pagecontent %}
 
     
