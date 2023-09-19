@@ -7,21 +7,26 @@ from django.contrib.auth.models import User
 
 class UserRegisterForm(UserCreationForm):
 
-    password1 = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
+    password1 = forms.CharField(
+        label="Contraseña", 
+        widget=forms.PasswordInput,
+        strip=False,
+        error_messages={'password_mismatch': 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.'}
+        )
     password2 = forms.CharField(label="Repita la Contraseña", widget=forms.PasswordInput)
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2']
         help_texts = {k:"" for k in fields}
     
-    def clean_password2(self):
+    # def clean_password2(self):
 
-        print(self.cleaned_data)
+    #     print(self.cleaned_data)
 
-        password2 = self.cleaned_data["password2"]
-        if password2 != self.cleaned_data["password1"]:
-            raise forms.ValidationError["Contraseña incorrecta"]
-        return password2
+    #     password2 = self.cleaned_data["password2"]
+    #     if password2 != self.cleaned_data["password1"]:
+    #         raise forms.ValidationError["Contraseña incorrecta"]
+    #     return password2
 
 
 class CreateTaskForm(forms.ModelForm):
