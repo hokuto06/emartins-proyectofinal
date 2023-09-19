@@ -5,3 +5,5 @@
 - ver perfil de usuario - cantidad de listas a su nombre
 
 
+pip install django
+pip install Pillow

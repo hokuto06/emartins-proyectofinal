@@ -188,9 +188,9 @@ def login_view(req: HttpRequest):
                 login(req, user) 
                 return render(req, "dashboard.html", {"message": f"Bienvenido {username}"})
             else:
-                return render(req, "dashboard.html", {"message": f"Datos incorrectos"})
+                return render(req, "login.html", {"formulario":formulario})
         else:
-            return render(req, "dashboard.html", {"message": "Datos incorrectos"})
+            return render(req, "login.html", {"formulario":formulario})
     else:
         formulario = AuthenticationForm()
         return render(req, "login.html", {"formulario": formulario})
@@ -209,7 +209,7 @@ def register(req: HttpRequest):
 
             formulario.save()
 
-            return render(req, "register_success.html", {"message": f"Usuario {username} creado"})
+            return render(req, "register_success.html", {"message": f"Usuario {username} creado con exito!"})
         else:
             return render(req, "dashboard.html", {"message": "Datos incorrectos"})
     else:

@@ -13,6 +13,15 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'password1', 'password2']
         help_texts = {k:"" for k in fields}
+    
+    def clean_password2(self):
+
+        print(self.cleaned_data)
+
+        password2 = self.cleaned_data["password2"]
+        if password2 != self.cleaned_data["password1"]:
+            raise forms.ValidationError["Contraseña incorrecta"]
+        return password2
 
 
 class CreateTaskForm(forms.ModelForm):
