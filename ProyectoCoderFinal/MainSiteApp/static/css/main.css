@@ -1,0 +1,92 @@
+/* Colores pastel */
+:root {
+  --color-primary: #6a0572; /* Púrpura pastel */
+  --color-secondary: #ff9a8b; /* Rosa pastel */
+  --color-tertiary: #83c5be; /* Verde pastel */
+  --color-quaternary: #f0e68c; /* Amarillo pastel */
+  --color-text: #333; /* Color de texto principal */
+}
+
+.task-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 20px;
+  justify-items: center;
+  margin: 30px;
+}
+
+.custom-card-style {
+  background-color: #fff; /* Cambiar el color de fondo */
+  padding: 10px; /* Añadir espacio alrededor del contenido */
+  font-size: 16px; /* Cambiar el tamaño de fuente */
+}
+/* Estilos para el navbar */
+.navbar {
+    background-color: var(--color-primary);
+  }
+  
+  .navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+  }
+  
+  .navbar-dark .navbar-toggler-icon {
+    background-color: #fff;
+  }
+  
+  /* Estilos para el sidebar */
+  .sidebar {
+    
+    background-color: #343a40;
+    border-right: 1px solid #343a40;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .sidebar-heading {
+    padding: 1rem;
+    font-weight: bold;
+  }
+  
+  .sidebar .nav-link {
+    /* color: var(--color-text); */
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  /* Estilos para el contenido principal (body) */
+  .main-content {
+    padding: 1rem;
+    background-color: #fff; /* Fondo blanco para el contenido principal */
+    color: var(--color-text);
+  }
+  
+  /* Estilos para el enlace activo en el sidebar */
+  .sidebar .nav-item.active .nav-link {
+    background-color: var(--color-secondary);
+    color: #fff;
+  }
+  
+  .list-group-item {
+    background-color: #343a40 !important;
+    color: rgba(255, 255, 255, 0.25) !important;
+  }
+  
+  /* Estilos para el espacio en el contenido cuando el sidebar está fijo (si es necesario) */
+  .fixed-sidebar ~ .main-content {
+    margin-left: 250px;
+  }
+  
+  /* Estilos para el contenido responsivo (si es necesario) */
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+  
+    .fixed-sidebar {
+      position: static;
+      width: 100%;
+    }
+  
+    .fixed-sidebar ~ .main-content {
+      margin-left: 0;
+    }
+  }
+  

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block pagecontent %}
+  
+  <div class="container-fluid">
+    <section>
+      {% if user.is_authenticated %}
+        <div class="container-fluid">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <h1 class="mt-4">Tareas</h1>
+              {% if count_tasks %}
+                <p>Total de tareas pendientes: {{ count_tasks }}</p>
+              {% endif %}
+            </div>
+            <div class="col-6 text-end">
+              <a class="btn btn-primary align-self-center" href="{% url 'CreateTask' %}">Nueva Tarea</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </section>
+    <section class="task-list">
+        {% for task  in  prueba %}
+        <div class="card border-primary mb-3" style="width: 18rem;">
+            <img class="img-fluid" style="width:20%;padding:5px;" src="https://freeiconshop.com/wp-content/uploads/edd/list-flat.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ task.task_name }}</h5>
+              <p class="card-text">{{ task.task_content }}</p>
+              <button>
+                <a href="{% url  'DetailTasks' task.id %}">Ver Detalle</a>
+              </button>
+              <!-- <a href="{% url  'ViewComments' task.id %}">Ver Comentarios</a> -->
+              <button>
+                <a href="{% url  'DeleteTask' task.id %}">Eliminar</a>
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+    </section>
+<!-- paginacion-->
+    <div class="d-flex justify-content-center">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+          <!--<li class="page-item"><a class="page-link" href="?page=1">FIRST</a></li>-->
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+          {% endif %}
+          {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+          <!--<li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>-->
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+    <div class="d-flex justify-content-center">
+    <span class="current">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span>
+    </div>
+  </div>
+  
+  {% endblock %}

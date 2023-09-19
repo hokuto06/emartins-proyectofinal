@@ -4,32 +4,32 @@
 {% block pagecontent %}
     
 <div class="container-fluid">
-    <h1>Tasks</h1>
+    <h1>Tareas</h1>
     <a href="{% url 'CreateTask' %}">Nueva Tarea</a>
    
     <section class="task-list">
 
         {% for task  in  tasklist %}
-        <div class="card" style="width: 18rem;">
-            <img style="max-width:20%;" src="https://freeiconshop.com/wp-content/uploads/edd/list-flat.png" class="card-img-top" alt="...">
+        <div class="card border-primary mb-3" style="width: 18rem;">
+            <img class="img-fluid" style="width:20%;padding:5px;" src="https://freeiconshop.com/wp-content/uploads/edd/list-flat.png" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{ task.task_name }}</h5>
-<<<<<<< HEAD
               <p class="card-text">{{ task.task_content }}</p>
+              <a href="{% url  'CreateComment' task.id %}">Agregar Comentario</a>
+              <!--
+              <form action="{% url  'CreateComment' task.id %}" method="get">{% csrf_token %}
+                <button type="submit">Agregar Comentario</button>
+              </form>-->
               <form action="{% url  'DeleteTask' task.id %}" method="post">{% csrf_token %}
                 <button type="submit">Delete</button>
               </form>
-=======
-              <p class="card-text">{{ task.id }}</p>
-              <a href="#" class="btn btn-primary">De1tail</a11>
->>>>>>> b9d62995b9ba640baba744eed2e5eb09319ac9c1
             </div>
-          </div>        
+          </div>
 
         {% endfor %}
     
     </section>
-        
+      
 </div>
 
 {% endblock %}

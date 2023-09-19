@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block pagecontent %}
+
+    <form method="post">{% csrf_token %}
+
+        <p>Seguro que desea eliminar la tarea?</p>
+
+        <button type="submit">Confirmar</button>
+        <button><a href="{% url 'ListTasks' %}">Cancelar</a></button>
+    </form>
+
+{% endblock pagecontent %}
