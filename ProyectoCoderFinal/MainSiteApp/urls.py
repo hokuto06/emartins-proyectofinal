@@ -27,5 +27,9 @@ urlpatterns = [
     path('edit-perfil/', edit_perfil, name="EditPerfil"),
     path('add-avatar/', add_avatar, name="AddAvatar"),
     path('about/', TemplateView.as_view(template_name='about.html'), name='About'),
+    # Mensajeria
+    path('send_message/<int:user_id>/', views.send_message, name='send_message'),
+    path('view_messages/<int:sender_id>/<int:receiver_id>/', views.view_messages, name='view_messages'),
+
 
 ]

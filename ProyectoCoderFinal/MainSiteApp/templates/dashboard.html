@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load  static %}
+
 
 {% block pagecontent %}
     
@@ -8,6 +10,10 @@
     <h1>Dashboard</h1>
     <p>Pagina inicial</p>
     <p>{{message}}</p>
+    <video width="530" height="440" controls autoplay>
+        <source src="{% static  'media/Media1.mp4' %}" type="video/mp4"> </source>
+      </video>
 </div>
+
 
 {% endblock %}

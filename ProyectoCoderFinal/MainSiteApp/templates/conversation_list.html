@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Conversaciones</title>
+</head>
+<body>
+    <h1>Lista de Conversaciones</h1>
+
+    <ul>
+        {% for conversation in conversations %}
+            <li><a href="{% url 'conversation_detail' conversation.id %}">Conversación con {{ conversation.participants.all|join:", " }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

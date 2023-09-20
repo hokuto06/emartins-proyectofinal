@@ -7,6 +7,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+#from .models import Conversation, Message
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import *
@@ -262,3 +264,23 @@ def add_avatar(req: HttpRequest):
     else:
         formulario = AvatarForm()
         return render(req, "add_avatar.html", {"formulario": formulario})
+    
+
+
+@login_required
+def conversation_list(request: HttpRequest):
+    conversations = request.user.conversations.all()
+    return render(request, 'conversation_list.html', {'conversations': conversations})
+
+@login_required
+def conversation_detail(request, conversation_id):
+    conversation = Conversation.objects.get(pk=conversation_id)
+    messages = Message.objects.filter(conversation=conversation).order_by('timestamp')
+    
+    if request.method == 'POST':
+        text = request.POST.get('message_text')
+        sender = request.user
+        message = Message(text=text, sender=sender, conversation=conversation)
+        message.save()
+
+    return render(request, 'conversation_detail.html', {'conversation': conversation, 'messages': messages})
