@@ -36,7 +36,8 @@
   /* Estilos para el sidebar */
   .sidebar {
     
-    background-color: #343a40;
+    /* background-color: #343a40; */
+    /* background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important; */
     border-right: 1px solid #343a40;
     color: rgba(255, 255, 255, 0.5);
   }
@@ -65,7 +66,7 @@
   }
   
   .list-group-item {
-    background-color: #343a40 !important;
+    /* background-color: #343a40 !important; */
     color: rgba(255, 255, 255, 0.25) !important;
   }
   
