@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block pagecontent %}
+
+
+<h1>Enviar Mensaje</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="recipient">Seleccionar destinatario:</label>
+    <select name="recipient" id="recipient">
+        {% for user in users %}
+        <option value="{{ user.id }}">{{ user.username }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <textarea name="message_text" placeholder="Escribe tu mensaje"></textarea>
+    <button type="submit">Enviar</button>
+</form>
+
+{% endblock pagecontent %}

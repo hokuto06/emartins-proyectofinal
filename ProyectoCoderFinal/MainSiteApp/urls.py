@@ -28,8 +28,7 @@ urlpatterns = [
     path('add-avatar/', add_avatar, name="AddAvatar"),
     path('about/', TemplateView.as_view(template_name='about.html'), name='About'),
     # Mensajeria
-    path('send_message/<int:user_id>/', views.send_message, name='send_message'),
-    path('view_messages/<int:sender_id>/<int:receiver_id>/', views.view_messages, name='view_messages'),
-
-
+    path('enviar-mensaje/', views.enviar_mensaje, name='enviar_mensaje'),    
+    path('conversations/', views.conversation_list, name='conversation_list'),
+    path('conversation/<int:conversation_id>/', views.conversation_detail, name='conversation_detail'),
 ]

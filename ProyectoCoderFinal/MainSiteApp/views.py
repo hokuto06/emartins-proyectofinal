@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import *
 
+@login_required
 def inicio(req: HttpRequest):
  
     try:
@@ -284,3 +285,34 @@ def conversation_detail(request, conversation_id):
         message.save()
 
     return render(request, 'conversation_detail.html', {'conversation': conversation, 'messages': messages})
+
+
+@login_required
+def enviar_mensaje(request):
+    if request.method == 'POST':
+        recipient_id = request.POST.get('recipient')
+        message_text = request.POST.get('message_text')
+
+        # Obtener el destinatario y el remitente
+        recipient = User.objects.get(pk=recipient_id)
+        sender = request.user
+
+        # Crear una nueva conversación
+        conversation = Conversation.objects.create()
+        conversation.participants.add(sender, recipient)
+
+        # Crear el mensaje inicial
+        message = Message.objects.create(
+            text=message_text,
+            sender=sender,
+            conversation=conversation
+        )
+
+        # Redirigir a la página de detalle de la conversación recién creada
+        return redirect('conversation_detail', conversation_id=conversation.id)
+
+    # Obtener la lista de usuarios (puedes personalizar esto según tus necesidades)
+    users = User.objects.all()
+
+    return render(request, 'enviar_mensaje.html', {'users': users})
+

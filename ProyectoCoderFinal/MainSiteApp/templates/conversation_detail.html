@@ -1,25 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Conversación</title>
-</head>
-<body>
-    <h1>Conversación</h1>
 
-    <div class="conversation">
-        {% for message in messages %}
-            <div class="message">
-                <p>{{ message.text }}</p>
-                <small>{{ message.sender.username }} - {{ message.timestamp }}</small>
-            </div>
-        {% endfor %}
+{% extends 'base.html' %}
+
+{% block pagecontent %}
+
+<h1>Conversación</h1>
+
+<div class="conversation">
+    {% for message in messages %}
+    <div class="message">
+        <p>{{ message.text }}</p>
+        <small>{{ message.sender.username }} - {{ message.timestamp }}</small>
     </div>
+    {% endfor %}
+</div>
 
-    <form method="post">
-        {% csrf_token %}
-        <textarea name="message_text" placeholder="Escribe tu mensaje"></textarea>
-        <button type="submit">Enviar</button>
-    </form>
-</body>
-</html>
+<form method="post">
+    {% csrf_token %}
+    <textarea name="message_text" placeholder="Escribe tu mensaje"></textarea>
+    <button type="submit">Enviar</button>
+</form>
+
+<a href="{% url 'conversation_detail' conversation.id %}">Refresh</a>
+{% endblock pagecontent %}
