@@ -2,22 +2,30 @@ from django import forms
 from .models import *
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
-#from bootstrap_datepicker_plus import DatePickerInput
-#from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 
 class UserRegisterForm(UserCreationForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].error_messages = {'unique': 'El usuario ya existe.'}
 
     password1 = forms.CharField(
         label="Contraseña", 
         widget=forms.PasswordInput,
         strip=False,
-        error_messages={'password_mismatch': 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.'}
-        )
-    password2 = forms.CharField(label="Repita la Contraseña", widget=forms.PasswordInput)
+    )
+    password2 = forms.CharField(
+        label="Repita la Contraseña",
+        widget=forms.PasswordInput,
+    )
+    error_messages = {
+        'password_mismatch': 'Las contraseñas no coinciden. Inténtelo nuevamente.',
+    }
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2']
-        help_texts = {k:"" for k in fields}
+        help_texts = {k: "" for k in fields}
+
     
     # def clean_password2(self):
 
@@ -39,10 +47,6 @@ class CreateTaskForm(forms.ModelForm):
             'deadline' : 'Fecha de finalizacion',
             'task_content': 'Contenido',
         }
-        # widgets = {
-        #     'deadline': DateTimePickerInput(),
-        # }
-
 
 class TaskCreationForm(forms.Form):
 
@@ -53,9 +57,8 @@ class TaskCreationForm(forms.Form):
 class CommentCreationForm(forms.Form):
 
     comment = forms.CharField(widget=forms.Textarea)
-    state = forms.BooleanField()
-    # task_comment = forms.CharField()
-    task_comment = forms.ModelChoiceField(queryset=TasksList.objects.all())
+    state = forms.BooleanField(widget=forms.HiddenInput(), initial=True)
+    task_comment = forms.ModelChoiceField(widget=forms.HiddenInput(),queryset=TasksList.objects.all())
 
 class UserEditForm(UserChangeForm):
 

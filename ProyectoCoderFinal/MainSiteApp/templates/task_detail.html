@@ -10,10 +10,17 @@
         </div>
         <div class="card-body">
             <div class="mt-3 border rounded custom-card-style" >
+                <div class="mt-3 border rounded custom-card-style" >
+                    
+                    <p class="card-text">{{ object.task_description }}</p>
+                    <p class="card-text">{{ object.task_content }}</p>
+                </div>
+                <br>
                 <a href="{% url  'CreateComment' object.id %}">Agregar Comentario</a>
 
-                <p class="card-text">{{ object.task_description }}</p>
-                <p class="card-text">{{ object.task_content }}</p>
+                {% if object.owner.username == user.username %}
+                    <a type=button class="btn btn-danger" style="float: right;" href="{% url  'DeleteTask' object.id %}">Eliminar</a>
+                {% endif %}
                 <div class="d-flex align-items-center">
                     <p class="mb-0">Total comentarios: {{ total_rows }}</p>
                     <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#comentarios">
@@ -23,11 +30,12 @@
             </div>
             <div class="collapse mt-3" id="comentarios">
                 <ul class="list-group">
+                    <!-- chat gpt  -->
                     {% for comentario in comentarios %}
-                    <li class="list-group-item-light d-flex justify-content-between align-items-center">
-                        <a>{{ comentario.comment }}</a>
+                    <li class="list-group-item-light d-flex justify-content-between align-items-center custom-list-item">
+                        <a style="{% if comentario.state %}text-decoration: line-through;{% endif %}">{{ comentario.comment }}</a>
                         <div>
-                            <input type="checkbox" {% if not object.open %}disabled{% endif %}>
+                            <input type="checkbox" data-comment-id="{{ comentario.id }}" data-comment-state="{{ comentario.state }}" {% if comentario.state %}checked{% endif %}>
                         </div>
                     </li>
                     {% endfor %}
@@ -36,6 +44,38 @@
         </div>
     </div>
 </div>
+
+
+<!-- chat gpt-->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('click', function () {
+            const commentId = this.getAttribute('data-comment-id');
+            const commentState = this.getAttribute('data-comment-state');
+            const newCommentState = commentState === 'True' ? 'False' : 'True';
+
+            // Envia una solicitud AJAX para actualizar el estado del comentario en Django.
+            fetch(`/proyecto-final/update_comment_state/${commentId}/${newCommentState}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Si la actualización fue exitosa, actualiza el atributo de datos y el estado del checkbox.
+                        this.setAttribute('data-comment-state', newCommentState);
+                        // Recarga la vista después de actualizar el estado
+                        window.location.reload();
+                    } else {
+                        // Maneja errores aquí.
+                        console.error('Error al actualizar el estado del comentario.');
+                    }
+                });
+        });
+    });
+});
+
+</script>
 
 
 

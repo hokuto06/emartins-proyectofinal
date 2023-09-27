@@ -6,9 +6,8 @@ from django.contrib.auth.views import LogoutView
 from .views import *
 #test
 urlpatterns = [
-    path('', views.inicio, name="Dashboard"),
-    #path('list-tasks/', view_tasks, name="ListTasks"),
-    # path('new-task', createTask, name="CreateTask"),
+    # path('', views.inicio, name="Dashboard"),
+    path('', AllTaskView.as_view(), name="Dashboard"),
     #path('delete-task/<int:id>', delete_task, name="DeleteTask"),
     path('create-comment/<int:id>', create_comment, name="CreateComment"),
     # path('create-comment/<int:pk>', CreateTasksListRow.as_view(), name="CreateComment"),
@@ -26,9 +25,13 @@ urlpatterns = [
     # path('logout/', LogoutView.as_view(template_name="dashboard.html"), name="Logout"),
     path('edit-perfil/', edit_perfil, name="EditPerfil"),
     path('add-avatar/', add_avatar, name="AddAvatar"),
+    path('edit-avatar/', edit_avatar, name="EditAvatar"),
     path('about/', TemplateView.as_view(template_name='about.html'), name='About'),
+    path('help/', help, name='Help'),
     # Mensajeria
     path('enviar-mensaje/', views.enviar_mensaje, name='enviar_mensaje'),    
     path('conversations/', views.conversation_list, name='conversation_list'),
     path('conversation/<int:conversation_id>/', views.conversation_detail, name='conversation_detail'),
+    path('update_comment_state/<int:comment_id>/<str:comment_state>/', update_comment_state, name='update_comment_state'),
+
 ]

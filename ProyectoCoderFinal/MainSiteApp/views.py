@@ -9,9 +9,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 #from .models import Conversation, Message
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+import itertools
 
 from .models import *
 from .forms import *
+from .utils import get_user_color
 
 @login_required
 def inicio(req: HttpRequest):
@@ -21,28 +24,6 @@ def inicio(req: HttpRequest):
         return render(req, 'dashboard.html', {"message":f"test","url": avatar.image.url})
     except:
         return render(req, 'dashboard.html')
-
-def view_tasks(req: HttpRequest):
-    task_list = TasksList.objects.filter(owner=req.user)
-    #task_list = TasksList.objects.all()
-    # count_tasks = TaskComments.objects.filter(task_comment__id=id).count()
-    print(task_list)
-    return render(req, 'tasks.html', {"tasklist": task_list})
-
-def createTask(req):
-
-    if req.method == 'POST':
-        formTask = TaskCreationForm(req.POST)
-        if formTask.is_valid():
-            data = formTask.cleaned_data
-            newtask = TasksList( task_name = data['task_name'], task_description = data['task_description'],
-                              task_content = data['task_content'] )
-            newtask.save()
-            task_list = TasksList.objects.all()
-            return render(req, "tasks.html", {"tasklist": task_list})
-    else:
-        taskForm = TaskCreationForm()
-    return render(req, "taskForm.html", {"taskForm": taskForm})
 
 def delete_task(req, id):
     
@@ -54,29 +35,6 @@ def delete_task(req, id):
 
         return render(req, 'tasks.html', {'tasklist': task_list})
     
-# def create_comment(req: HttpRequest, id):
-#     taskObject = TasksList.objects.get(id=id)
-
-#     if req.method == 'POST':
-#         print("Esto es metodo post")
-#         formComment = CommentCreationForm(req.POST)
-#         if formComment.is_valid():
-#             data = formComment.cleaned_data
-
-#             task_comment = TasksListRows(comment=data['comment'],state=data['state'],task_comment=taskObject)
-#             task_comment.save()
-#             return render(req, 'tasks.html')
-    
-#     else:
-#         print("esto es metodo get")
-#         task = TasksList.objects.get(id=id)
-#         comment_form = CommentCreationForm(initial={
-#             "state": 1,
-#             "task_comment":task,
-#         })
-
-#         return render(req, 'commentForm.html', {"commentForm": comment_form, 'task': task})
-
 
 def create_comment(req, id):
     taskObject = TasksList.objects.get(id=id)
@@ -84,16 +42,16 @@ def create_comment(req, id):
     if req.method == 'POST':
         formComment = CommentCreationForm(req.POST)
         if formComment.is_valid():
-            data = formComment.cleaned_data
-            task_comment = TasksListRows(comment=data['comment'], state=data['state'], task_comment=taskObject)
+            data = formComment.cleaned_data 
+            # El estado (open o close) siempre es 0 
+            task_comment = TasksListRows(comment=data['comment'], state=0, task_comment=taskObject) 
             task_comment.save()
-            # Redirige al detalle del objeto relacionado
             return redirect('DetailTasks', pk=id)
     
     else:
         task = TasksList.objects.get(id=id)
         comment_form = CommentCreationForm(initial={
-            "state": 1,
+            "state": 1, # Envio el valor del bolean como True pq me da error si es 0 error, no se corrige por tiempo de entrega. 
             "task_comment": task,
         })
 
@@ -104,7 +62,29 @@ def view_comments(req: HttpRequest, id):
     comment_list = TasksListRows.objects.filter(task_comment__id=id)
     print(comment_list)
     return render(req, 'task_comment.html', {'comment_list': comment_list})
+
 ###Clases basadas en vistas
+
+class AllTaskView(LoginRequiredMixin, ListView):
+    model = TasksList
+    template_name = "dashboard.html"
+    context_object_name = "lists"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Obtén todas las tareas
+        tasks = TasksList.objects.all()
+
+        # Agrupar tareas por propietario (owner)
+        tasks_by_owner = {}
+        tasks = sorted(tasks, key=lambda task: task.owner.id)
+
+        for owner_id, task_group in itertools.groupby(tasks, key=lambda task: task.owner.id):
+            tasks_by_owner[owner_id] = list(task_group)
+
+        context['tasks_by_owner'] = tasks_by_owner  # Pasar las tareas agrupadas al contexto
+        print(context['tasks_by_owner'])
+        return context
 
 class TaskList(LoginRequiredMixin, ListView):
     model = TasksList
@@ -120,15 +100,16 @@ class TaskDetail(DetailView):
 
     model = TasksList
     template_name = "task_detail.html"
-    #context_object_name = "task"
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
-        # Obtener la instancia de la task actual
         task = self.object
-        # Obtener todos los comentarios relacionados con esta task
         rows = task.taskslistrows_set.all()
-        # Obtener el total de rows de la task
+        allrows = TasksListRows.objects.all()
+        for taskrow in allrows:
+            if taskrow.comment == 'Implementacion de Nh City':
+                print(f'\nEstado: {taskrow.state} - Tarea: {taskrow.comment}\n')
+        print(allrows)
         total_rows = rows.count()
         context['comentarios'] = rows
         context['total_rows'] = total_rows        
@@ -150,21 +131,6 @@ class CreateTask(CreateView):
     def get_form_class(self):
         return CreateTaskForm
 
-
-# class CreateTasksListRow(CreateView):
-    
-#     model = TasksListRows
-#     template_name = "commentForm.html"
-#     form_class = CreateTaskForm
-   
-#     def form_valid(self, form):
-#         form.instance.task_comment = self.object.task_comment
-#         return super().form_valid(form)
-
-#     def get_success_url(self):
-#         return "/proyecto-final/list-tasks/"
-    
-    
 class DeleteTask(DeleteView):
     model = TasksList
     template_name = "delete_task.html"
@@ -199,26 +165,20 @@ def login_view(req: HttpRequest):
         return render(req, "login.html", {"formulario": formulario})
 
 def register(req: HttpRequest):
-
     if req.method == 'POST':
-
         formulario = UserRegisterForm(req.POST)
-
         if formulario.is_valid():
-
             data = formulario.cleaned_data
-
             username = data['username']
-
             formulario.save()
-
             return render(req, "register_success.html", {"message": f"Usuario {username} creado con exito!"})
-        else:
-            return render(req, "dashboard.html", {"message": "Datos incorrectos"})
+#        else:
+            # return render(req, "register.html", {"formulario": formulario})
     else:
         formulario = UserRegisterForm()
-        return render(req, "register.html", {"formulario": formulario})
-    
+    return render(req, "register.html", {"formulario": formulario})
+
+@login_required
 def edit_perfil(req: HttpRequest):
 
     user = req.user
@@ -242,13 +202,11 @@ def edit_perfil(req: HttpRequest):
         formulario = UserEditForm(instance=req.user)    
     
         return render(req, 'edit_perfil.html', {"formulario": formulario})
-    
+
+@login_required
 def add_avatar(req: HttpRequest):
-
     if req.method == 'POST':
-
         formulario = AvatarForm(req.POST, req.FILES)
-
         if formulario.is_valid():
 
             data = formulario.cleaned_data
@@ -265,7 +223,29 @@ def add_avatar(req: HttpRequest):
     else:
         formulario = AvatarForm()
         return render(req, "add_avatar.html", {"formulario": formulario})
-    
+
+@login_required
+def edit_avatar(request):
+    user = request.user
+    try:
+        avatar = Avatar.objects.get(user=user)
+    except Avatar.DoesNotExist:
+        avatar = None
+
+    if request.method == 'POST':
+        form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid():
+            if avatar:
+                avatar.image = form.cleaned_data['image']
+            else:
+                avatar = Avatar(user=user, image=form.cleaned_data['image'])
+            avatar.save()
+            return redirect('EditAvatar') 
+
+    else:
+        form = AvatarForm(instance=avatar)
+
+    return render(request, 'edit_avatar.html', {'form': form, 'avatar': avatar})
 
 
 @login_required
@@ -316,3 +296,15 @@ def enviar_mensaje(request):
 
     return render(request, 'enviar_mensaje.html', {'users': users})
 
+@login_required
+def help(req):
+    return render(req,'help.html')
+
+def update_comment_state(request, comment_id, comment_state):
+    try:
+        comment = TasksListRows.objects.get(pk=comment_id)
+        comment.state = comment_state
+        comment.save()
+        return JsonResponse({'success': True})
+    except TasksListRows.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Comentario no encontrado'})

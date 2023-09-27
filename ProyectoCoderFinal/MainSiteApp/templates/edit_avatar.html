@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block pagecontent %}
+    <h1>Editar Avatar</h1>
+
+    <div class="avatar-preview">
+        {% if avatar %}
+            <img src="{{ avatar.image.url }}" height="100px"  alt="Avatar actual">
+        {% else %}
+            <p>No tienes un avatar actualmente.</p>
+        {% endif %}
+    </div>
+
+    <form action="{% url 'EditAvatar' %}" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+{% endblock pagecontent %}

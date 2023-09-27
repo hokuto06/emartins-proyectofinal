@@ -65,11 +65,21 @@
     color: #fff;
   }
   
-  .list-group-item {
-    /* background-color: #343a40 !important; */
+  /* .list-group-item {
+    color: rgba(255, 255, 255, 0.25) !important;
+  } */
+  
+.custom-list-item {
+  border: 1px solid #ccc;
+  padding: 5px; 
+  margin-bottom: 10px;
+}
+
+
+  .nav-item {
     color: rgba(255, 255, 255, 0.25) !important;
   }
-  
+
   /* Estilos para el espacio en el contenido cuando el sidebar está fijo (si es necesario) */
   .fixed-sidebar ~ .main-content {
     margin-left: 250px;
