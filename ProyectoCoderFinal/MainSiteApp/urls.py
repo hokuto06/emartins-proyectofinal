@@ -33,5 +33,4 @@ urlpatterns = [
     path('conversations/', views.conversation_list, name='conversation_list'),
     path('conversation/<int:conversation_id>/', views.conversation_detail, name='conversation_detail'),
     path('update_comment_state/<int:comment_id>/<str:comment_state>/', update_comment_state, name='update_comment_state'),
-
 ]

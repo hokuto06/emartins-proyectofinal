@@ -88,12 +88,17 @@ class AllTaskView(LoginRequiredMixin, ListView):
 
 class TaskList(LoginRequiredMixin, ListView):
     model = TasksList
-    template_name = "list_task.html"
+    template_name = "task_list.html"
     paginate_by = 3
     # fields = '__all__'
     context_object_name = "prueba"
     def get_queryset(self):
-        return super().get_queryset().filter(owner=self.request.user)
+        query = self.request.GET.get('q')
+        queryset = super().get_queryset().filter(owner=self.request.user)
+        if query:
+            queryset = queryset.filter(task_name__icontains=query)
+        return queryset        
+        # return super().get_queryset().filter(owner=self.request.user)
 
 
 class TaskDetail(DetailView):
@@ -308,3 +313,18 @@ def update_comment_state(request, comment_id, comment_state):
         return JsonResponse({'success': True})
     except TasksListRows.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Comentario no encontrado'})
+
+
+# def search(req: HttpRequest):
+
+#     if req.GET["taskName"]:
+#         ipAddress = req.GET['taskName']
+#         deviceName = TaskList.objects.filter(ipAddress__icontains=ipAddress)
+#         status = AccessPoints.objects.filter(ipAddress__icontains=ipAddress)
+#         return render(req, "resultadosBusqueda.html", {"deviceName":deviceName, "ipAddress":ipAddress, "status":status})
+#         #return HttpResponse(rsta)
+    
+#     else:
+#         rsta = "No se ingresaron datos"
+    
+#     return HttpResponse(rsta)

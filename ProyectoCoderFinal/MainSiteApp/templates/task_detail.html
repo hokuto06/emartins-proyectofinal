@@ -30,9 +30,10 @@
             </div>
             <div class="collapse mt-3" id="comentarios">
                 <ul class="list-group">
-                    <!-- chat gpt  -->
+                    <!-- Este bloque lo escribí con ayuda de chat gpt  -->
                     {% for comentario in comentarios %}
                     <li class="list-group-item-light d-flex justify-content-between align-items-center custom-list-item">
+                        <!-- El anchor funciona y la condicion funcionan, pero no puedo quitar este errror que mem marca vscode.  -->
                         <a style="{% if comentario.state %}text-decoration: line-through;{% endif %}">{{ comentario.comment }}</a>
                         <div>
                             <input type="checkbox" data-comment-id="{{ comentario.id }}" data-comment-state="{{ comentario.state }}" {% if comentario.state %}checked{% endif %}>
