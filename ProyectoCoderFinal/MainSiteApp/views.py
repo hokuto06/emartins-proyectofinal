@@ -16,6 +16,8 @@ from .models import *
 from .forms import *
 from .utils import get_user_color
 
+
+# funciones a revisar!!!!!!!!!!!!
 @login_required
 def inicio(req: HttpRequest):
  
@@ -25,16 +27,16 @@ def inicio(req: HttpRequest):
     except:
         return render(req, 'dashboard.html')
 
-def delete_task(req: HttpRequest, id):
-    if req.method == 'POST':
-        task = TasksList.objects.get(id=id)
-        if task.owner == req.user:
-            task.delete()
-            task_list = TasksList.objects.all()
+# def delete_task(req: HttpRequest, id):
+#     if req.method == 'POST':
+#         task = TasksList.objects.get(id=id)
+#         if task.owner == req.user:
+#             task.delete()
+#             task_list = TasksList.objects.all()
 
-            return render(req, 'tasks.html', {'tasklist': task_list})
-        else:
-            return render(req, '404.html', status=404)
+#             return render(req, 'tasks.html', {'tasklist': task_list})
+#         else:
+#             return render(req, '404.html', status=404)
 
 def create_comment(req, id):
     taskObject = TasksList.objects.get(id=id)
@@ -63,7 +65,9 @@ def view_comments(req: HttpRequest, id):
     print(comment_list)
     return render(req, 'task_comment.html', {'comment_list': comment_list})
 
-###Clases basadas en vistas
+##
+#Crud de Tasks
+# Creado con Clases basadas en vistas
 
 class AllTaskView(LoginRequiredMixin, ListView):
     model = TasksList
@@ -71,18 +75,13 @@ class AllTaskView(LoginRequiredMixin, ListView):
     context_object_name = "lists"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # Obtén todas las tareas
         tasks = TasksList.objects.all()
-
-        # Agrupar tareas por propietario (owner)
         tasks_by_owner = {}
         tasks = sorted(tasks, key=lambda task: task.owner.id)
-
         for owner_id, task_group in itertools.groupby(tasks, key=lambda task: task.owner.id):
             tasks_by_owner[owner_id] = list(task_group)
 
-        context['tasks_by_owner'] = tasks_by_owner  # Pasar las tareas agrupadas al contexto
+        context['tasks_by_owner'] = tasks_by_owner 
         print(context['tasks_by_owner'])
         return context
 
@@ -99,7 +98,6 @@ class TaskList(LoginRequiredMixin, ListView):
             queryset = queryset.filter(task_name__icontains=query)
         return queryset        
         # return super().get_queryset().filter(owner=self.request.user)
-
 
 class TaskDetail(DetailView):
 
@@ -120,8 +118,6 @@ class TaskDetail(DetailView):
         context['total_rows'] = total_rows        
         return context
 
-
-#pasar owner id
 class CreateTask(CreateView):
     
     model = TasksList
@@ -142,22 +138,16 @@ class DeleteTask(DeleteView):
     success_url = "/proyecto-final/list-tasks/"
 
 
-##### login #####
-
+# Funciones de usuario: Login; Register; edit; avatar
 def login_view(req: HttpRequest):
 
     if req.method == 'POST':
-
         formulario = AuthenticationForm(req, data=req.POST)
-
         if formulario.is_valid():
-
             data = formulario.cleaned_data
             username = data["username"]
             password = data["password"]
-
             user = authenticate(username=username, password=password)
-
             if user:
                 login(req, user) 
                 return render(req, "dashboard.html", {"message": f"Bienvenido {username}"})
@@ -185,16 +175,11 @@ def register(req: HttpRequest):
 
 @login_required
 def edit_perfil(req: HttpRequest):
-
     user = req.user
-
     if req.method == 'POST':
         formulario = UserEditForm(req.POST, instance=req.user )
-    
         if formulario.is_valid():
-
             data = formulario.cleaned_data
-
             user.first_name = data['first_name']
             user.last_name = data['last_name']
             # user.email = data['email']
@@ -205,7 +190,6 @@ def edit_perfil(req: HttpRequest):
             return render(req, 'edit_perfil.html', {"formulario": formulario})
     else:
         formulario = UserEditForm(instance=req.user)    
-    
         return render(req, 'edit_perfil.html', {"formulario": formulario})
 
 @login_required
@@ -213,18 +197,12 @@ def add_avatar(req: HttpRequest):
     if req.method == 'POST':
         formulario = AvatarForm(req.POST, req.FILES)
         if formulario.is_valid():
-
             data = formulario.cleaned_data
-
             avatar = Avatar(user=req.user, image=data['image'])
-
             avatar.save()
-
             return render(req, "dashboard.html", {"message": f"Avatar actualizado con exito!"})
-
         else:
             return render(req, "dashboard.html", {"message": "Formulario invalido"})
-        
     else:
         formulario = AvatarForm()
         return render(req, "add_avatar.html", {"formulario": formulario})
@@ -252,7 +230,7 @@ def edit_avatar(request):
 
     return render(request, 'edit_avatar.html', {'form': form, 'avatar': avatar})
 
-
+# Funciones del chat entre usuarios. 
 @login_required
 def conversation_list(request: HttpRequest):
     conversations = request.user.conversations.all()
@@ -271,40 +249,29 @@ def conversation_detail(request, conversation_id):
 
     return render(request, 'conversation_detail.html', {'conversation': conversation, 'messages': messages})
 
-
 @login_required
 def enviar_mensaje(request):
     if request.method == 'POST':
         recipient_id = request.POST.get('recipient')
         message_text = request.POST.get('message_text')
-
-        # Obtener el destinatario y el remitente
         recipient = User.objects.get(pk=recipient_id)
         sender = request.user
-
-        # Crear una nueva conversación
         conversation = Conversation.objects.create()
         conversation.participants.add(sender, recipient)
-
-        # Crear el mensaje inicial
         message = Message.objects.create(
             text=message_text,
             sender=sender,
             conversation=conversation
         )
-
-        # Redirigir a la página de detalle de la conversación recién creada
         return redirect('conversation_detail', conversation_id=conversation.id)
-
-    # Obtener la lista de usuarios (puedes personalizar esto según tus necesidades)
     users = User.objects.all()
-
     return render(request, 'enviar_mensaje.html', {'users': users})
 
 @login_required
 def help(req):
     return render(req,'help.html')
 
+# chat gpt
 def update_comment_state(request, comment_id, comment_state):
     try:
         comment = TasksListRows.objects.get(pk=comment_id)
@@ -313,9 +280,6 @@ def update_comment_state(request, comment_id, comment_state):
         return JsonResponse({'success': True})
     except TasksListRows.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Comentario no encontrado'})
-
-
-from django.shortcuts import render
 
 def error_404_view(req, exception):
     return render(req, '404.html', status=404)
