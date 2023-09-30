@@ -1,10 +1,13 @@
 from django.urls import path
 from django.views.generic import TemplateView
 from MainSiteApp import views
-
 from django.contrib.auth.views import LogoutView
+from django.conf.urls import handler404
+
 from .views import *
-#test
+
+handler404 = error_404_view
+
 urlpatterns = [
     # path('', views.inicio, name="Dashboard"),
     path('', AllTaskView.as_view(), name="Dashboard"),

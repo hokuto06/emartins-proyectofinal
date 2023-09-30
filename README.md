@@ -11,11 +11,11 @@ Este es un proyecto simple de lista de tareas que permite a los usuarios crear, 
 ## 
 ## Instalación
 
-1. Clona este repositorio: `git clone https://github.com/tuusuario/nombre-de-tu-repositorio.git`
-2. Entra al directorio del proyecto: `cd nombre-de-tu-repositorio`
-3. Crea un entorno virtual (opcional, pero recomendado): `virtualenv venv`
-4. Activa el entorno virtual: `source venv/bin/activate` (en sistemas basados en Unix) o `venv\Scripts\activate` (en Windows)
-5. Instala las dependencias: `pip install -r requirements.txt`
+1. Clona este repositorio: `git clone https://github.com/hokuto06/emartins-proyectofinal.git`
+2. Entra al directorio del proyecto: `cd emartins-proyectofinal`
+3. Crea un entorno virtual (opcional, pero recomendado): `pipenv`
+4. Activa el entorno virtual: `pipenv shell`
+5. Instala las dependencias: `pip install django` y `pip install Pillow`
 
 ## Uso
 
@@ -42,6 +42,3 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 **Nota:** Este es un ejemplo muy básico. En un proyecto real, querrás proporcionar mucha más información, especialmente en las secciones de Uso, Contribución y Documentación. También puedes agregar capturas de pantalla, badges de estado del proyecto y cualquier otra información relevante para los usuarios y desarrolladores.
 
 
-
-pip install django
-pip install Pillow

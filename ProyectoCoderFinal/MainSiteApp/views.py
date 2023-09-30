@@ -25,16 +25,16 @@ def inicio(req: HttpRequest):
     except:
         return render(req, 'dashboard.html')
 
-def delete_task(req, id):
-    
+def delete_task(req: HttpRequest, id):
     if req.method == 'POST':
-
         task = TasksList.objects.get(id=id)
-        task.delete()
-        task_list = TasksList.objects.all()
+        if task.owner == req.user:
+            task.delete()
+            task_list = TasksList.objects.all()
 
-        return render(req, 'tasks.html', {'tasklist': task_list})
-    
+            return render(req, 'tasks.html', {'tasklist': task_list})
+        else:
+            return render(req, '404.html', status=404)
 
 def create_comment(req, id):
     taskObject = TasksList.objects.get(id=id)
@@ -315,16 +315,7 @@ def update_comment_state(request, comment_id, comment_state):
         return JsonResponse({'success': False, 'message': 'Comentario no encontrado'})
 
 
-# def search(req: HttpRequest):
+from django.shortcuts import render
 
-#     if req.GET["taskName"]:
-#         ipAddress = req.GET['taskName']
-#         deviceName = TaskList.objects.filter(ipAddress__icontains=ipAddress)
-#         status = AccessPoints.objects.filter(ipAddress__icontains=ipAddress)
-#         return render(req, "resultadosBusqueda.html", {"deviceName":deviceName, "ipAddress":ipAddress, "status":status})
-#         #return HttpResponse(rsta)
-    
-#     else:
-#         rsta = "No se ingresaron datos"
-    
-#     return HttpResponse(rsta)
+def error_404_view(req, exception):
+    return render(req, '404.html', status=404)
