@@ -99,11 +99,14 @@ class TaskDetail(DetailView):
         context = super().get_context_data(**kwargs)
         task = self.object
         rows = task.taskslistrows_set.all()
-        allrows = TasksListRows.objects.all()
-        for taskrow in allrows:
-            if taskrow.comment == 'Implementacion de Nh City':
-                print(f'\nEstado: {taskrow.state} - Tarea: {taskrow.comment}\n')
-        print(allrows)
+        all_completed_rows = all(row.state for row in rows)
+        context['all_completed_rows'] = all_completed_rows
+        print(f'**************{all_completed_rows}**************')
+        # allrows = TasksListRows.objects.all()
+        # for taskrow in allrows:
+        #     if taskrow.comment == 'Implementacion de Nh City':
+        #         print(f'\nEstado: {taskrow.state} - Tarea: {taskrow.comment}\n')
+        # print(allrows)
         total_rows = rows.count()
         context['comentarios'] = rows
         context['total_rows'] = total_rows        

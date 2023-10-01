@@ -3,18 +3,30 @@
 {% load static %}
 
 {% block pagecontent %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-4">
+                <div class="card-header ">
+                    <h3 class="mb-0">Crear Comentario</h3>
+                </div>
+                <div class="card-body">
+                    {% if commentForm.errors %}
+                    <div class="alert alert-danger">
+                        <strong>Datos incorrectos:</strong> Por favor, revisa los errores en el formulario.
+                    </div>
+                    {% endif %}
 
-{% if taskForm.errors %}
-
-<p> Datos incorrectos</p>
-
-{% endif %}
-
-<p>{{ task.task_name }}</p>
-<form action="{% url  'CreateComment' task.id %}" method="POST">{% csrf_token %}
-        
-        {{ commentForm.as_p }}
-    
-    <input type="submit" value="Enviar">
-</form>
+                    <form action="{% url 'CreateComment' task.id %}" method="post">
+                        {% csrf_token %}
+                        {{ commentForm.as_p }}
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
