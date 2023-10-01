@@ -16,7 +16,7 @@
                     <p class="card-text">{{ object.task_content }}</p>
                 </div>
                 <br>
-                <a href="{% url  'CreateComment' object.id %}">Agregar Comentario</a>
+                <a href="{% url  'CreateComment' object.id %}">Agregar Sub Tarea</a>
                 <a href="{% url  'EditTask' object.id %}">Editar</a>
 
                 {% if object.owner.username == user.username %}

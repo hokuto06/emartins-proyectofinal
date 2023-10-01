@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, CreateView, UpdateView
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -152,8 +153,10 @@ def login_view(req: HttpRequest):
             password = data["password"]
             user = authenticate(username=username, password=password)
             if user:
-                login(req, user) 
-                return render(req, "dashboard.html", {"message": f"Bienvenido {username}"})
+                login(req, user)
+                redirect_url = reverse('ListTasks')
+                return HttpResponseRedirect(redirect_url, {"message": f"Bienvenido {username}"})
+            
             else:
                 return render(req, "login.html", {"formulario":formulario})
         else:
