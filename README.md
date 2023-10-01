@@ -2,7 +2,7 @@
 
 Este es un proyecto simple de lista de tareas que permite a los usuarios crear, ver y administrar sus propias tareas.
 
-# Estructura del proyecto. Esta es una aplicación desarrollada en python, con Framework Django.  Consta de una unica aplicacion que concentra todas las funcionalidades. 
+**Estructura del proyecto. Esta es una aplicación desarrollada en python, con Framework Django.  Consta de una unica aplicacion que concentra todas las funcionalidades.** 
 
 ## Funcionalidades de la aplicacion:
 - CRUD completo con Registro de nuevos usuarios; login, logout y edicion de perfil; creacion y edición de Avatar.
