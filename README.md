@@ -6,8 +6,8 @@ Este es un proyecto simple de lista de tareas que permite a los usuarios crear, 
 
 # Funcionalidades de la aplicacion:
 - Registro de nuevos usuarios, login, creacion y edición de Avatar.
-**Creación de nuevos objecto de tipo Tareasñ; Vistas listando todas las tareas, con filtro en la barra de busqueda  y vista en detalle de tareas en forma indidvidual**
-**Creación de nuevas subtareas relacionadas a las tareas**
+- Creación de nuevos objecto de tipo Tareasñ; Vistas listando todas las tareas, con filtro en la barra de busqueda  y vista en detalle de tareas en forma indidvidual**
+- Creación de nuevas subtareas relacionadas a las tareas**
 ## 
 ## Instalación
 
