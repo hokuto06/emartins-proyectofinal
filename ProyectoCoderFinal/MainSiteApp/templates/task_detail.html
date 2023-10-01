@@ -17,6 +17,7 @@
                 </div>
                 <br>
                 <a href="{% url  'CreateComment' object.id %}">Agregar Comentario</a>
+                <a href="{% url  'EditTask' object.id %}">Editar</a>
 
                 {% if object.owner.username == user.username %}
                     <a type=button class="btn btn-danger" style="float: right;" href="{% url  'DeleteTask' object.id %}">Eliminar</a>

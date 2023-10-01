@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block pagecontent %}
+    
+<h2>Editar Tarea</h2>
+<form method="post">
+    {% csrf_token %}
+        {{ form.as_p }}
+    <button type="submit">Guardar</button>
+</form>
+<a href="{% url 'ListTasks' %}">Cancelar</a>
+
+{% endblock pagecontent %}
+    

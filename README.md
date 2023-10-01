@@ -1,5 +1,6 @@
 # Proyecto de Lista de Tareas
 
+Este es un proyecto simple que permite a los usuarios la creacion de listas de tareas 
 Este es un proyecto simple de lista de tareas que permite a los usuarios crear, ver y administrar sus propias tareas.
 
 **Estructura del proyecto. Esta es una aplicación desarrollada en python, con Framework Django.  Consta de una unica aplicacion que concentra todas las funcionalidades.** 

@@ -26,16 +26,6 @@ class UserRegisterForm(UserCreationForm):
         fields = ['username', 'password1', 'password2']
         help_texts = {k: "" for k in fields}
 
-    
-    # def clean_password2(self):
-
-    #     print(self.cleaned_data)
-
-    #     password2 = self.cleaned_data["password2"]
-    #     if password2 != self.cleaned_data["password1"]:
-    #         raise forms.ValidationError["Contraseña incorrecta"]
-    #     return password2
-
 
 class CreateTaskForm(forms.ModelForm):
     class Meta:
@@ -47,12 +37,23 @@ class CreateTaskForm(forms.ModelForm):
             'deadline' : 'Fecha de finalizacion',
             'task_content': 'Contenido',
         }
+        widgets = {
+            'deadline': forms.TextInput(attrs={'type': 'datetime-local'}),
+        }
 
-class TaskCreationForm(forms.Form):
+class TasksListForm(forms.ModelForm):
+    class Meta:
+        model = TasksList
+        fields = ['task_name', 'task_description', 'task_content', 'deadline', 'open']
+        widgets = {
+            'deadline': forms.TextInput(attrs={'type': 'datetime-local'}),
+        }
 
-    task_name = forms.CharField()
-    task_description = forms.CharField()
-    task_content = forms.CharField(widget=forms.Textarea)
+# class TaskCreationForm(forms.Form):
+
+#     task_name = forms.CharField()
+#     task_description = forms.CharField()
+#     task_content = forms.CharField(widget=forms.Textarea)
 
 class CommentCreationForm(forms.Form):
 

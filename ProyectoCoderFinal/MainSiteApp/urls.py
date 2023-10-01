@@ -9,26 +9,23 @@ from .views import *
 handler404 = error_404_view
 
 urlpatterns = [
-    # path('', views.inicio, name="Dashboard"),
+    # Tasks
     path('', AllTaskView.as_view(), name="Dashboard"),
-    #path('delete-task/<int:id>', delete_task, name="DeleteTask"),
     path('create-comment/<int:id>', create_comment, name="CreateComment"),
-    # path('create-comment/<int:pk>', CreateTasksListRow.as_view(), name="CreateComment"),
-    #path('create-comment/<int:pk>/', CreateTasksListRow.as_view(), name='CreateComment'),
-    # path('create-comment', CreateTasksListRow.as_view(), name='CreateComment'),
-
     path('view-comments/<int:id>', view_comments, name="ViewComments"),
     path('list-tasks/', TaskList.as_view(), name="ListTasks"),
     path('detail-tasks/<pk>', TaskDetail.as_view(), name="DetailTasks"),
     path('create-task', CreateTask.as_view(), name="CreateTask"),
     path('delete-task/<pk>', DeleteTask.as_view(), name="DeleteTask"),
+    path('edit-task/<pk>', EditTaskView.as_view(), name="EditTask"),
+    # Usuarios
     path('login/', login_view, name="Login"),
     path('register', register, name="Register"),
     path('logout/', LogoutView.as_view(next_page="Login"), name="Logout"),
-    # path('logout/', LogoutView.as_view(template_name="dashboard.html"), name="Logout"),
     path('edit-perfil/', edit_perfil, name="EditPerfil"),
     path('add-avatar/', add_avatar, name="AddAvatar"),
     path('edit-avatar/', edit_avatar, name="EditAvatar"),
+
     path('about/', TemplateView.as_view(template_name='about.html'), name='About'),
     path('help/', help, name='Help'),
     # Mensajeria

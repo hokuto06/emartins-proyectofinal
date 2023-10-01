@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 #from .models import Conversation, Message
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from django.http import JsonResponse
 import itertools
 
@@ -26,17 +27,6 @@ def inicio(req: HttpRequest):
         return render(req, 'dashboard.html', {"message":f"test","url": avatar.image.url})
     except:
         return render(req, 'dashboard.html')
-
-# def delete_task(req: HttpRequest, id):
-#     if req.method == 'POST':
-#         task = TasksList.objects.get(id=id)
-#         if task.owner == req.user:
-#             task.delete()
-#             task_list = TasksList.objects.all()
-
-#             return render(req, 'tasks.html', {'tasklist': task_list})
-#         else:
-#             return render(req, '404.html', status=404)
 
 def create_comment(req, id):
     taskObject = TasksList.objects.get(id=id)
@@ -136,6 +126,19 @@ class DeleteTask(DeleteView):
     model = TasksList
     template_name = "delete_task.html"
     success_url = "/proyecto-final/list-tasks/"
+
+
+class EditTaskView(UpdateView):
+    model = TasksList
+    form_class = TasksListForm
+    template_name = 'task_edit.html'
+
+    def get_success_url(self):
+        task_id = self.kwargs['pk']
+        return reverse('DetailTasks', args=[task_id])
+
+    def get_queryset(self):
+        return TasksList.objects.filter(owner=self.request.user)
 
 
 # Funciones de usuario: Login; Register; edit; avatar
