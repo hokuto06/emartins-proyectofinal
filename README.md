@@ -40,6 +40,6 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ---
 
-**Nota:** Este proyecto aun se encuentra en desarrollo.
+**Nota:** Este proyecto aun se encuentra en etapa de desarrollo.
 
 
