@@ -24,6 +24,9 @@ Este es un proyecto simple de lista de tareas que permite a los usuarios crear, 
 2. Abra su navegador y visita `http://localhost:8000/proyecto-final/`
 3. ¡Empieza a crear tus tareas!
 
+[Texto del Enlace](https://youtu.be/jJ_BdIMhCqU)
+
+
 <!-- ## Contribución
 
 Si desea contribuir a este proyecto, por favor siga estos pasos:
