@@ -24,7 +24,7 @@ Este es un proyecto simple de lista de tareas que permite a los usuarios crear, 
 2. Abra su navegador y visita `http://localhost:8000/proyecto-final/`
 3. ¡Empieza a crear tus tareas!
 
-## Contribución
+<!-- ## Contribución
 
 Si desea contribuir a este proyecto, por favor siga estos pasos:
 
@@ -32,7 +32,7 @@ Si desea contribuir a este proyecto, por favor siga estos pasos:
 2. Crea una nueva rama para tu característica: `git checkout -b mi-nueva-caracteristica`
 3. Haz tus cambios y haz commit: `git commit -m "Agrega mi nueva característica"`
 4. Sube tus cambios: `git push origin mi-nueva-caracteristica`
-5. Abre una solicitud de extracción en GitHub
+5. Abre una solicitud de extracción en GitHub -->
 
 <!-- ## Licencia
 
