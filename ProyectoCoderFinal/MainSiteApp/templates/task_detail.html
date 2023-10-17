@@ -2,7 +2,8 @@
 
 
 {% block pagecontent %}
-<input type=button value="Previous Page" onClick="javascript:history.go(-1);">
+<!-- <input type=button value="Previous Page" onClick="javascript:history.go(-1);"> -->
+<a href="javascript: history.go(-1)">Go Back</a>
 <div class="container mt-5">
     <div class="card">
         <div class="card-header" style="{% if all_completed_rows %}background-color: green;{% endif %}">
