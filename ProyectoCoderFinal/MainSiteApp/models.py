@@ -23,6 +23,7 @@ class TasksListRows(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     state = models.BooleanField() # Este campo debio llamarse "Open" 
     task_comment = models.ForeignKey(TasksList, on_delete=models.CASCADE)
+    date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.comment}'

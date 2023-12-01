@@ -55,6 +55,20 @@ class TasksListForm(forms.ModelForm):
 #     task_description = forms.CharField()
 #     task_content = forms.CharField(widget=forms.Textarea)
 
+class CreateCommentForm(forms.ModelForm):
+    class Meta:
+        model = TasksListRows
+        fields = ['task_comment', 'state', 'date', 'comment']
+        labels = {
+            'task_comment': "Nombre",
+            'state': 'Descripcion',
+            'date' : 'Fecha de finalizacion',
+            'comment': 'comentario',
+        }
+        widgets = {
+            'date': forms.TextInput(attrs={'type': 'datetime-local'}),
+        }
+
 class CommentCreationForm(forms.Form):
 
     comment = forms.CharField(widget=forms.Textarea)
